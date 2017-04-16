@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RomanNumberTests.cs" />
+    <Compile Include="SentenceParserTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EscapeToSpace\EscapeToSpace.csproj">
