@@ -10,6 +10,15 @@ namespace EscapeToSpace.Tests
         public void Initialize()
         {
             parser = new SentenceParser();
+            //Load roman numbers
+            SentenceTypes t;
+            parser.Parse("icecream is i", out t);
+            parser.Parse("velvet is v", out t);
+            parser.Parse("xmen ix X", out t);
+            parser.Parse("lift is L", out t);
+            parser.Parse("CENt is c", out t);
+            parser.Parse("Drum is D", out t);
+            parser.Parse("Make is m", out t);
         }
 
         [TestMethod()]
@@ -23,7 +32,7 @@ namespace EscapeToSpace.Tests
         public void VerifyRomanNumberDefinitionSentenceType()
         {
             SentenceTypes st;
-            var tokens = parser.Parse("Cheese is I", out st);
+            var tokens = parser.Parse("icecream is I", out st);
             Assert.AreEqual(SentenceTypes.RomanNumberMapper, st);
             Assert.AreEqual(3, tokens.Length);
         }
@@ -31,7 +40,7 @@ namespace EscapeToSpace.Tests
         public void VerifyComodityUnitPriceDefinitionSentenceType()
         {
             SentenceTypes st;
-            var tokens = parser.Parse("Cheese Cheese Copper is 80 Credits", out st);
+            var tokens = parser.Parse("VELVET icecream Copper is 80 Credits", out st);
             Assert.AreEqual(SentenceTypes.CommodityDefinition, st);
             Assert.AreEqual(6, tokens.Length);
         }
