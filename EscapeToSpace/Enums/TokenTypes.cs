@@ -7,6 +7,7 @@
         Equality = 3,
         Commodity = 4,
         Unit = 5,
-        Query = 6
+        Query = 6,
+        UnitPrice = 7
     }
 }

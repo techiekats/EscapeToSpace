@@ -11,5 +11,13 @@ namespace EscapeToSpace
             this.tokenText = tokenText;
             this.type = type;
         }
+
+        public TokenTypes Type
+        {
+            get
+            {
+                return type;
+            }
+        }
     }
 }
