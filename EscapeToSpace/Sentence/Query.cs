@@ -13,7 +13,7 @@ namespace EscapeToSpace
         private string commodityName = string.Empty;
         public Query ()
         {
-            type = Enums.SentenceTypes.Query;
+            type = Enums.SentenceTypes.RomanNumberTranslationQuery;
         }
         public override Sentence Parse(string sentence, ParseTableReader reader)
         {
@@ -40,26 +40,38 @@ namespace EscapeToSpace
                 }
                 else if (reader.IsValidCommodity(tokenStrings[i]))
                 {
-                    if (i==tokenStrings.Length-1 && tokens.Last().Type == Enums.TokenTypes.AlienDigit && RomanNumber.Parse(alienDigits) > 0)
+                    if (tokens.Last().Type == Enums.TokenTypes.AlienDigit && RomanNumber.Parse(alienDigits) > 0)
                     {
-                        commodityName = tokenStrings[i];
-                        tokens.Add(new Token(commodityName, Enums.TokenTypes.AlienDigit));
-                    }
-                    else
-                    {
-                        throw new FormatException();
+                        if (i == tokenStrings.Length - 1) //if commodity definition, then it has to be the last
+                        {
+                            commodityName = tokenStrings[i];
+                            type = Enums.SentenceTypes.CommodityValueQuery;
+                            tokens.Add(new Token(commodityName, Enums.TokenTypes.AlienDigit));
+                        }
+                        else
+                        {
+                            throw new FormatException();
+                        }
                     }
                 }
                 else
                 {
                     throw new FormatException();
                 }
+                if (i == tokens.Count - 1)
+                {
+                    RomanNumber.Parse(alienDigits); //would throw exception if alien digits dont obey the roman number rules
+                }
             }
             return this;
         }
-        public Tuple<string, string> GetQueryTerms ()
+        public Tuple<string, string> GetCommodityQueryTerms ()
         {
             return new Tuple<string, string>(alienDigits, commodityName);
+        }
+        public string GetAlienDigitsForQuery ()
+        {
+            return alienDigits;
         }
     }
 }

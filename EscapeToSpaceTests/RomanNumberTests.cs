@@ -115,6 +115,8 @@ namespace EscapeToSpace.Tests
             validRomanNumbers.Add(new Tuple<string, int>("cxlviii", 148));
             validRomanNumbers.Add(new Tuple<string, int>("III", 3));
             validRomanNumbers.Add(new Tuple<string, int>("clxxxvi", 186));
+            validRomanNumbers.Add(new Tuple<string, int>("XXXIX", 39));
+            validRomanNumbers.Add(new Tuple<string, int>("mcmiii", 1903));
             foreach (var t in validRomanNumbers)
             {
                 Assert.AreEqual(t.Item2, RomanNumber.Parse(t.Item1));

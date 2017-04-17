@@ -24,18 +24,27 @@ namespace EscapeToSpace
                 foreach (string s in commands)
                 {
                     var parsedSentence = parser.Parse(s);
-                    if (parsedSentence.Type == Enums.SentenceTypes.Query)
+                    if (parsedSentence.Type == Enums.SentenceTypes.CommodityValueQuery)
                     {
                         int result = parser.Evaluate(parsedSentence);
-                        string message = result == int.MinValue ? "Sorry, didnt get that" : result.ToString();
-                        Console.WriteLine($"{ parsedSentence.Original} => {result.ToString()}");
+                        Console.WriteLine($"{ parsedSentence.Original} is {result.ToString()} Credits");
+                    }
+                    if (parsedSentence.Type == Enums.SentenceTypes.RomanNumberTranslationQuery)
+                    {
+                        int result = parser.Evaluate(parsedSentence);
+                        Console.WriteLine($"{ parsedSentence.Original} is {result.ToString()}");
                     }
                     if (parsedSentence.Type == Enums.SentenceTypes.Invalid)
                     {
-                        string message = "Invalid. please check the query";
+                        string message = "I have no idea what you are talking about";
                         Console.WriteLine($"{ parsedSentence.Original} => {message}");
                     }
                 }
+            }
+            else
+            {
+                Console.WriteLine("incorrect number of arguments passed.");
+                Console.ReadKey();
             }
         }
         /// <summary>

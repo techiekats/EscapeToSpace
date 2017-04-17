@@ -11,6 +11,7 @@ namespace EscapeToSpace.Enums
         Invalid = -1,
         RomanNumberMapper = 1,
         CommodityDefinition = 2,
-        Query = 3
+        RomanNumberTranslationQuery = 3,
+        CommodityValueQuery = 4
     }
 }

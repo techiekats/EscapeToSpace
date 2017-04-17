@@ -55,8 +55,8 @@ namespace EscapeToSpace.Tests
             if (seed.Type == SentenceTypes.CommodityDefinition)
             {
                 var st = parser.Parse("how much is cent lift platinum ?");
-                var t = (st as Query).GetQueryTerms();
-                Assert.AreEqual(SentenceTypes.Query, st.Type);
+                var t = (st as Query).GetCommodityQueryTerms();
+                Assert.AreEqual(SentenceTypes.CommodityValueQuery, st.Type);
                 Assert.AreEqual("CL", t.Item1);
                 Assert.AreEqual("platinum", t.Item2);
             }
@@ -75,10 +75,10 @@ namespace EscapeToSpace.Tests
             Assert.AreEqual(1000, result);
         }
         [TestMethod()]
-        public void EvaluateIncorrectQuery ()
+        public void EvaluateIncorrectCommodityQuery ()
         {
             var seed = parser.Parse("cenT gold is 2000 credits");
-            var query = parser.Parse("okay when does this end?");
+            var query = parser.Parse("looking forward to spring time?");
             try
             {
                 var result = parser.Evaluate(query);
@@ -88,6 +88,34 @@ namespace EscapeToSpace.Tests
             {
                 Assert.AreEqual(1, 1);
             }
+        }
+        [TestMethod()]
+        public void EvaluateIncorrectRomanNumberQuery()
+        {
+            var query = parser.Parse("how much is cent cent make?"); //invalid roman number
+            try
+            {
+                var result = parser.Evaluate(query);
+                Assert.Fail();
+            }
+            catch (ArgumentException ex)
+            {
+                Assert.AreEqual(1, 1);
+            }
+        }
+        [TestMethod()]
+        public void EvaluateRomanNumberQueryTest1 ()
+        {
+            var query = parser.Parse("how much is lift?");
+            var result = parser.Evaluate(query);
+            Assert.AreEqual(50, result);
+        }
+        [TestMethod()]
+        public void EvaluateRomanNumberQueryTest2()
+        {
+            var query = parser.Parse("how much is make drum lift velvet Icecream?");
+            var result = parser.Evaluate(query);
+            Assert.AreEqual(1556, result);
         }
     }
 }

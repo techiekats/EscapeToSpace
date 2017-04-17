@@ -50,7 +50,7 @@ namespace EscapeToSpace
             if (valid)
             {
                 //check max repetitions of I,X, C, M
-                valid = !(romanDigits.Count(c=> c=='I') > 3 || romanDigits.Count(c => c == 'X') > 3 || romanDigits.Count(c => c == 'C') > 3 || romanDigits.Count(c => c == 'M') > 3);
+                valid = !(romanDigits.Contains("IIII") || romanDigits.Contains("XXXX") || romanDigits.Contains("CCCC") || romanDigits.Contains("MMMM"));
                 reasonIfInvalid = "Characters I,X,C,M can appear only thrice in a continuous sequence";
             }
             if (valid)

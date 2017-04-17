@@ -65,6 +65,7 @@
     <Content Include="TestInput1.txt">
       <SubType>Component</SubType>
     </Content>
+    <Content Include="TestInput2.txt" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
