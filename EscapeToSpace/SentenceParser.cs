@@ -121,13 +121,14 @@ namespace EscapeToSpace
         }
         public char GetTranslationForAlienDigit (string key)
         {
+            key = key.Trim().ToLower();
             if (romanNumberTranslation.ContainsKey(key))
                 return romanNumberTranslation[key];
             return Char.MinValue;
         }
         public bool IsValidCommodity (string key)
         {
-            return commodityUnitPrice.ContainsKey(key);
+            return commodityUnitPrice.ContainsKey(key.Trim().ToLower());
         }
     }
 }

@@ -8,13 +8,17 @@ namespace EscapeToSpace
     class CommodityValueAssigner : Sentence
     {
         private string commodityName = string.Empty;
+        private string alienDigits = string.Empty;
         private int unitPrice = 0;
+        public CommodityValueAssigner ()
+        {
+            type = SentenceTypes.CommodityDefinition;
+        }
         public override Sentence Parse(string sentence, ParseTableReader reader)
         {
             string[] tokenStrings = sentence.Split(new char[] { ' ' }).Where(s => s != "").ToArray<string>();
 
             List<Token> parsedTokens = new List<Token>();
-            string commodity = string.Empty;
             type = SentenceTypes.CommodityDefinition;
             for (int i = 0; i < tokenStrings.Length; i++)
             {
@@ -24,6 +28,7 @@ namespace EscapeToSpace
                     if (i == 0 || parsedTokens.Last().Type == TokenTypes.AlienDigit)
                     {
                         parsedTokens.Add(new Token(tokenStrings[i], TokenTypes.AlienDigit));
+                        alienDigits += reader.GetTranslationForAlienDigit(tokenStrings[i]);
                     }
                     else
                     {
@@ -41,10 +46,10 @@ namespace EscapeToSpace
                 }
                 else if (int.TryParse(tokenStrings[i], out result))
                 {
-                    if (parsedTokens.Last().Type == TokenTypes.Equality)
+                    if (parsedTokens.Last().Type == TokenTypes.Equality && RomanNumber.Parse(alienDigits) > 0)
                     {
                         parsedTokens.Add(new Token(tokenStrings[i], TokenTypes.UnitPrice));
-                        unitPrice = int.Parse(tokenStrings[i]);
+                        unitPrice = int.Parse(tokenStrings[i]) / RomanNumber.Parse(alienDigits) ;
                     }
                     else
                     {
@@ -54,13 +59,13 @@ namespace EscapeToSpace
                 else if (parsedTokens.Last()?.Type == TokenTypes.AlienDigit)
                 {
                     parsedTokens.Add(new Token(tokenStrings[i], TokenTypes.Commodity));
-                    commodity = tokenStrings[i];
+                    commodityName = tokenStrings[i];
                 }
             }
             return this;
         }
         public Tuple<string,int> GetCommodityUnitPrice ()
-        {
+        { 
             return new Tuple<string, int>(commodityName, unitPrice);
         }
     }

@@ -8,6 +8,10 @@ namespace EscapeToSpace
 {
     class Query : Sentence
     {
+        public Query ()
+        {
+            type = Enums.SentenceTypes.CommodityDefinition;
+        }
         public override Sentence Parse(string sentence, ParseTableReader reader)
         {
             throw new NotImplementedException();
