@@ -28,6 +28,7 @@ namespace EscapeToSpace
         /// <returns></returns>
         public Sentence Parse(string sentence)
         {
+            sentence = sentence.Trim().ToLower();
             Sentence parsedSentence;
             try
             {

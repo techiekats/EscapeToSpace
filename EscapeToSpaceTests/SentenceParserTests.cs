@@ -2,6 +2,7 @@
 using EscapeToSpace.Enums;
 using EscapeToSpace;
 using System;
+using System.Collections.Generic;
 
 namespace EscapeToSpace.Tests
 {
@@ -14,16 +15,14 @@ namespace EscapeToSpace.Tests
         {
             parser = new SentenceParser();
             //Load roman numbers
-            SentenceTypes t;
             parser.Parse("icecream is i");
             parser.Parse("velvet is v");
-            parser.Parse("xmen ix X");
+            parser.Parse("xmen is X");
             parser.Parse("lift is L");
             parser.Parse("CENt is c");
             parser.Parse("Drum is D");
             parser.Parse("Make is m");
         }
-
         [TestMethod()]
         public void VerifyInvalidSentenceType()
         {
@@ -65,7 +64,6 @@ namespace EscapeToSpace.Tests
                 Assert.Fail();
             }
         }
-
         [TestMethod()]
         public void EvaluateTest()
         {
@@ -116,6 +114,30 @@ namespace EscapeToSpace.Tests
             var query = parser.Parse("how much is make drum lift velvet Icecream?");
             var result = parser.Evaluate(query);
             Assert.AreEqual(1556, result);
+        }
+        [TestMethod()]
+        public void EvaluateMultipleSentencesTest ()
+        {
+            List<Tuple<string, int>> notes = new List<Tuple<string, int>>();
+            notes.Add(new Tuple<string, int>("Xmen soil is 100 Credits", -1));
+            notes.Add(new Tuple<string, int>("icecream iceCream iceCream titanium is 3600 credits", -1));
+            notes.Add(new Tuple<string, int>("Velvet icecream Aluminium is 1080 credits", -1));
+            notes.Add(new Tuple<string, int>("Icecream Iron is 444 credits", -1));
+            notes.Add(new Tuple<string, int>("Lift Water is 300 Credits", -1));
+            notes.Add(new Tuple<string, int>("How much is xmen icecream velvet soil?", 140));
+            notes.Add(new Tuple<string, int>("How many credits is icecream titanium?", 1200));
+            notes.Add(new Tuple<string, int>("how many credits is drum xmen iron ?", 444 * 510));
+            notes.Add(new Tuple<string, int>("how much is icecream water?",6));
+            notes.Add(new Tuple<string, int>("how many credits is make icecream xmen aluminium?", 1009 * 180));
+            foreach (var note in notes)
+            {
+                var st = parser.Parse(note.Item1);
+                Assert.AreNotEqual(SentenceTypes.Invalid, st.Type, $"invalid: {note.Item1}");
+                if (st.Type == SentenceTypes.CommodityValueQuery || st.Type == SentenceTypes.RomanNumberTranslationQuery)
+                {
+                    Assert.AreEqual(note.Item2, parser.Evaluate(st));
+                }
+            }
         }
     }
 }
