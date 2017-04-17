@@ -1,0 +1,14 @@
+﻿indigo is I
+violet is V
+xe is X
+lily is l
+cyan is C
+darkMaroon is d
+darkPurple is D
+maroon is M
+darkPurple lily violet tin is 1110 credits
+darkMaroon lily violet iron is 555 credits
+xe xe darkMaroon gold is 1 credits
+maroon diamond is -1 credits
+how much is xe diamond?
+how many credits is maroon cyan xe tin?

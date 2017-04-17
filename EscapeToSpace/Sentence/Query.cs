@@ -17,6 +17,7 @@ namespace EscapeToSpace
         }
         public override Sentence Parse(string sentence, ParseTableReader reader)
         {
+            original = sentence;
             string pattern = @"(how much|how many credits|how many Credits) (is)";
             string pattern2 = @"(\w+)+";
             var tokens1 = Regex.Split(sentence, pattern).Where(s=>s!=string.Empty).ToList<string>();

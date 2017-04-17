@@ -8,13 +8,15 @@ namespace EscapeToSpace
 {
     public class InvalidSentence : Sentence
     {
-        public InvalidSentence ()
+        public InvalidSentence (string sentence)
         {
-            type = Enums.SentenceTypes.Invalid; 
+            type = Enums.SentenceTypes.Invalid;
+            original = sentence;
         }
 
         public override Sentence Parse(string sentence, ParseTableReader reader)
         {
+            original = sentence;
             throw new NotImplementedException();
         }
     }

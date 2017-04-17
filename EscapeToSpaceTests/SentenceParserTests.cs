@@ -1,6 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EscapeToSpace.Enums;
 using EscapeToSpace;
+using System;
+
 namespace EscapeToSpace.Tests
 {
     [TestClass()]
@@ -77,8 +79,15 @@ namespace EscapeToSpace.Tests
         {
             var seed = parser.Parse("cenT gold is 2000 credits");
             var query = parser.Parse("okay when does this end?");
-            var result = parser.Evaluate(query);
-            Assert.AreEqual(int.MinValue, result);
+            try
+            {
+                var result = parser.Evaluate(query);
+                Assert.Fail();
+            }
+            catch (ArgumentException ex)
+            {
+                Assert.AreEqual(1, 1);
+            }
         }
     }
 }

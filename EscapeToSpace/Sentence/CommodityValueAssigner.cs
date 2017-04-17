@@ -16,6 +16,7 @@ namespace EscapeToSpace
         }
         public override Sentence Parse(string sentence, ParseTableReader reader)
         {
+            original = sentence;
             string[] tokenStrings = sentence.Split(new char[] { ' ' }).Where(s => s != "").ToArray<string>();
 
             List<Token> parsedTokens = new List<Token>();

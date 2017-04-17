@@ -18,6 +18,7 @@ namespace EscapeToSpace
         }
         public override Sentence Parse(string sentence, ParseTableReader reader)
         {
+            original = sentence;
             string[] tokenStrings = Regex.Split(sentence, numberDefinitionPattern).Where(s => s != "").ToArray<string>();
             if (tokenStrings.Length != 3)
             {

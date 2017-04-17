@@ -30,7 +30,7 @@ namespace EscapeToSpace
                 }
                 catch (FormatException ex)
                 {
-                    parsedSentence = new InvalidSentence();
+                    parsedSentence = new InvalidSentence(sentence);
                 }
             }
             else if (Regex.IsMatch(sentence, commodityDefinitionPattern))
@@ -42,7 +42,7 @@ namespace EscapeToSpace
                 }
                 catch (FormatException ex)
                 {
-                    parsedSentence = new InvalidSentence();
+                    parsedSentence = new InvalidSentence(sentence);
                 }
             }
             else if (Regex.IsMatch(sentence, queryPattern) && sentence.EndsWith("?"))
@@ -53,26 +53,29 @@ namespace EscapeToSpace
                 }
                 catch (FormatException ex)
                 {
-                    parsedSentence = new InvalidSentence();
+                    parsedSentence = new InvalidSentence(sentence);
                 }
             }
             else
             {
-                parsedSentence = new InvalidSentence();
+                parsedSentence = new InvalidSentence(sentence);
             }
             return parsedSentence;
         }
 
         public int Evaluate (Sentence query)
         {
-            if (query.Type == SentenceTypes.Invalid)
+            if (query.Type == SentenceTypes.Query)
             {
-                return int.MinValue;
+                var t = (query as Query).GetQueryTerms();
+                int numberOfItems = RomanNumber.Parse(t.Item1);
+                int unitPrice = parseTables.GetReader().GetCommodityUnitPrice(t.Item2);
+                return numberOfItems * unitPrice;
             }
-            var t = (query as Query).GetQueryTerms();
-            int numberOfItems = RomanNumber.Parse(t.Item1);
-            int unitPrice = parseTables.GetReader().GetCommodityUnitPrice(t.Item2);
-            return numberOfItems * unitPrice;
+            else
+            {
+                throw new ArgumentException("object of type query is expected");
+            }
         }
         private void UpdateRomanNumberMap(Tuple<string, char> tuple)
         {
