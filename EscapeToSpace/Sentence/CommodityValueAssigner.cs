@@ -9,7 +9,7 @@ namespace EscapeToSpace
     {
         private string commodityName = string.Empty;
         private string alienDigits = string.Empty;
-        private int unitPrice = 0;
+        private float unitPrice = 0;
         public CommodityValueAssigner ()
         {
             type = SentenceTypes.CommodityDefinition;
@@ -50,7 +50,7 @@ namespace EscapeToSpace
                     if (parsedTokens.Last().Type == TokenTypes.Equality && RomanNumber.Parse(alienDigits) > 0)
                     {
                         parsedTokens.Add(new Token(tokenStrings[i], TokenTypes.UnitPrice));
-                        unitPrice = int.Parse(tokenStrings[i]) / RomanNumber.Parse(alienDigits) ;
+                        unitPrice = float.Parse(tokenStrings[i]) / RomanNumber.Parse(alienDigits) ;
                     }
                     else
                     {
@@ -65,9 +65,9 @@ namespace EscapeToSpace
             }
             return this;
         }
-        public Tuple<string,int> GetCommodityUnitPrice ()
+        public Tuple<string,float> GetCommodityUnitPrice ()
         { 
-            return new Tuple<string, int>(commodityName, unitPrice);
+            return new Tuple<string, float>(commodityName, unitPrice);
         }
     }
 }

@@ -69,8 +69,8 @@ namespace EscapeToSpace
             {
                 var t = (query as Query).GetCommodityQueryTerms();
                 int numberOfItems = RomanNumber.Parse(t.Item1);
-                int unitPrice = parseTables.GetReader().GetCommodityUnitPrice(t.Item2);
-                return numberOfItems * unitPrice;
+                float unitPrice =  parseTables.GetReader().GetCommodityUnitPrice(t.Item2);
+                return (int)(numberOfItems * unitPrice);
             }
             else if (query.Type == SentenceTypes.RomanNumberTranslationQuery)
             {
@@ -86,7 +86,7 @@ namespace EscapeToSpace
         {
             parseTables.UpdateRomanNumberMap(tuple);
         }
-        private void UpdateCommodityUnitPriceMap (Tuple<string, int> tuple)
+        private void UpdateCommodityUnitPriceMap (Tuple<string, float> tuple)
         {
             parseTables.UpdateCommodityUnitPriceMap(tuple);
         }
@@ -98,11 +98,11 @@ namespace EscapeToSpace
     public class ParseTables
     {
         private Dictionary<string, char> romanNumberTranslation;
-        private Dictionary<string, int> commodityUnitPrice;
+        private Dictionary<string, float> commodityUnitPrice;
         public ParseTables ()
         {
             romanNumberTranslation = new Dictionary<string, char>(7);
-            commodityUnitPrice = new Dictionary<string, int>();
+            commodityUnitPrice = new Dictionary<string, float>();
         }
         public ParseTableReader GetReader ()
         {
@@ -120,7 +120,7 @@ namespace EscapeToSpace
                 romanNumberTranslation.Add(key, tuple.Item2);
             }
         }
-        public void UpdateCommodityUnitPriceMap(Tuple<string, int> tuple)
+        public void UpdateCommodityUnitPriceMap(Tuple<string, float> tuple)
         {
             string key = tuple.Item1.Trim().ToLower();
             if (commodityUnitPrice.ContainsKey(key))
@@ -139,8 +139,8 @@ namespace EscapeToSpace
     public class ParseTableReader
     {
         private Dictionary<string, char> romanNumberTranslation;
-        private Dictionary<string, int> commodityUnitPrice;
-        public ParseTableReader (Dictionary<string, char> romanNumberTranslation, Dictionary<string, int> commodityUnitPrice)
+        private Dictionary<string, float> commodityUnitPrice;
+        public ParseTableReader (Dictionary<string, char> romanNumberTranslation, Dictionary<string, float> commodityUnitPrice)
         {
             this.romanNumberTranslation = romanNumberTranslation;
             this.commodityUnitPrice = commodityUnitPrice;
@@ -156,7 +156,7 @@ namespace EscapeToSpace
         {
             return commodityUnitPrice.ContainsKey(key.Trim().ToLower());
         }
-        public int GetCommodityUnitPrice (string key)
+        public float GetCommodityUnitPrice (string key)
         {
             key = key.Trim().ToLower();
             if (commodityUnitPrice.ContainsKey(key))
