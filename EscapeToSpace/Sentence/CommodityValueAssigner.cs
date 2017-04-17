@@ -5,7 +5,7 @@ using EscapeToSpace.Enums;
 
 namespace EscapeToSpace
 {
-    class CommodityValueAssigner : Sentence
+    public class CommodityValueAssigner : Sentence
     {
         private string commodityName = string.Empty;
         private string alienDigits = string.Empty;

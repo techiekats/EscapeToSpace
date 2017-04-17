@@ -12,7 +12,7 @@ namespace EscapeToSpace
     {
         private readonly string numberDefinitionPattern = @"(\w+) (is) (I|i|V|v|X|x|L|l|C|c|D|d|M|m)";
         private readonly string commodityDefinitionPattern = @"(\w+)+ (is) (\d+) (Credits|credits)";
-        private readonly string queryPattern = @"(how much|how many) (Credits|credits) (is) (\w+)";
+        private readonly string queryPattern = @"(how much|how many credits|how many Credits) (is) (\w+)";
         private readonly ParseTables parseTables;
         public SentenceParser ()
         {
@@ -22,7 +22,7 @@ namespace EscapeToSpace
         public Sentence Parse(string sentence)
         {
             Sentence parsedSentence;
-            if (Regex.IsMatch(sentence, numberDefinitionPattern))
+            if (Regex.IsMatch(sentence, numberDefinitionPattern) && !sentence.EndsWith("?"))
             {   try
                 {
                     parsedSentence = new RomanNumberMapper().Parse(sentence, parseTables.GetReader());
@@ -45,7 +45,7 @@ namespace EscapeToSpace
                     parsedSentence = new InvalidSentence();
                 }
             }
-            else if (Regex.IsMatch(sentence, queryPattern))
+            else if (Regex.IsMatch(sentence, queryPattern) && sentence.EndsWith("?"))
             {
                 try
                 {
@@ -63,6 +63,17 @@ namespace EscapeToSpace
             return parsedSentence;
         }
 
+        public int Evaluate (Sentence query)
+        {
+            if (query.Type == SentenceTypes.Invalid)
+            {
+                return int.MinValue;
+            }
+            var t = (query as Query).GetQueryTerms();
+            int numberOfItems = RomanNumber.Parse(t.Item1);
+            int unitPrice = parseTables.GetReader().GetCommodityUnitPrice(t.Item2);
+            return numberOfItems * unitPrice;
+        }
         private void UpdateRomanNumberMap(Tuple<string, char> tuple)
         {
             parseTables.UpdateRomanNumberMap(tuple);
@@ -94,7 +105,7 @@ namespace EscapeToSpace
             }
             else
             {
-                romanNumberTranslation.Add(tuple.Item1, tuple.Item2);
+                romanNumberTranslation.Add(key, tuple.Item2);
             }
         }
         public void UpdateCommodityUnitPriceMap(Tuple<string, int> tuple)
@@ -106,7 +117,7 @@ namespace EscapeToSpace
             }
             else
             {
-                commodityUnitPrice.Add(tuple.Item1, tuple.Item2);
+                commodityUnitPrice.Add(key, tuple.Item2);
             }
         }
     }
@@ -129,6 +140,15 @@ namespace EscapeToSpace
         public bool IsValidCommodity (string key)
         {
             return commodityUnitPrice.ContainsKey(key.Trim().ToLower());
+        }
+        public int GetCommodityUnitPrice (string key)
+        {
+            key = key.Trim().ToLower();
+            if (commodityUnitPrice.ContainsKey(key))
+            {
+                return commodityUnitPrice[key];
+            }
+            throw new KeyNotFoundException();
         }
     }
 }

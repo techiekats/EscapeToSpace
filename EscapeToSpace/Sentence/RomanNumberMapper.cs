@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EscapeToSpace
 {
-    class RomanNumberMapper : Sentence
+    public class RomanNumberMapper : Sentence
     {
         private readonly string numberDefinitionPattern = @"(\w+) (is) (I|i|V|v|X|x|L|l|C|c|D|d|M|m)";
         private string aliendigit = string.Empty;

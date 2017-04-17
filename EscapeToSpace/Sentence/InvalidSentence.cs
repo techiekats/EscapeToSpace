@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EscapeToSpace
 {
-    class InvalidSentence : Sentence
+    public class InvalidSentence : Sentence
     {
         public InvalidSentence ()
         {
